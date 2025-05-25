@@ -60,6 +60,24 @@ fun SignUpScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+
+        RoundedCornerTextField(
+            text = emailState.value,
+            label = "Email",
+        ) {
+            emailState.value = it
+        }
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        RoundedCornerTextField(
+            text = emailState.value,
+            label = "Email",
+        ) {
+            emailState.value = it
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+
         RoundedCornerTextField(
             text = emailState.value,
             label = "Email",

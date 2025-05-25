@@ -9,10 +9,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.influencify.ui.screens.add_ad.AddAdScreen
 import com.example.influencify.ui.screens.add_ad.data.AddScreenObject
-import com.example.influencify.ui.screens.details.AdDetailScreen
-import com.example.influencify.ui.screens.favorites.FavoritesScreen
 import com.example.influencify.ui.screens.categories.CategoriesScreen
 import com.example.influencify.ui.screens.categories.data.CategoriesScreenObject
+import com.example.influencify.ui.screens.details.AdDetailScreen
+import com.example.influencify.ui.screens.favorites.FavoritesScreen
 import com.example.influencify.ui.screens.favorites.data.FavoritesScreenObject
 import com.example.influencify.ui.screens.login.LoginScreen
 import com.example.influencify.ui.screens.login.SignUpScreen
@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             NavHost(
                 navController = navController,
-                startDestination = CategoriesScreenObject
+                startDestination = LoginScreenObject
             ) {
                 composable<LoginScreenObject> {
                     LoginScreen { navData ->
@@ -46,7 +46,8 @@ class MainActivity : ComponentActivity() {
                     val navData = navEntry.toRoute<MainScreenDataObject>()
                     MainScreen(
                         navData = navData,
-                        navController = navController
+                        navController = navController,
+                        selectedCategory = navData.selectedCategory,
                     )
                 }
                 composable<AddScreenObject> {
@@ -86,10 +87,20 @@ class MainActivity : ComponentActivity() {
                     )
                 }
                 composable<CategoriesScreenObject> {
+                    val navData = navController.previousBackStackEntry
+                        ?.toRoute<MainScreenDataObject>()
+                        ?: MainScreenDataObject("", "")
+
                     CategoriesScreen(
                         navController = navController,
                         onCategorieSelected = { category ->
-                            println("Selected category: $category")
+                            // Update the previous screen's navData with the selected category
+                            val updatedNavData = navData.copy(selectedCategory = category)
+                            // Just pop back to the previous screen (MainScreen) with the updated category
+                            navController.previousBackStackEntry?.savedStateHandle?.set(
+                                "selectedCategory",
+                                category
+                            )
                         }
                     )
                 }

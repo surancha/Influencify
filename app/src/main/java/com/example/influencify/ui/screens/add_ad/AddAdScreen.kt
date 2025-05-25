@@ -4,13 +4,16 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Scaffold
@@ -49,6 +52,8 @@ fun AddAdScreen(
     navData: MainScreenDataObject
 ) {
     val selectedPlatform = remember { mutableStateOf("") }
+    val selectedCategory = remember { mutableStateOf("") }
+    val selectedCurrency = remember { mutableStateOf("") }
     val title = remember { mutableStateOf("") }
     val description = remember { mutableStateOf("") }
     val urLink = remember { mutableStateOf("") }
@@ -91,12 +96,17 @@ fun AddAdScreen(
                 painter = if (selectedImageUri.value != null) {
                     rememberAsyncImagePainter(model = selectedImageUri.value)
                 } else {
-                    painterResource(id = R.drawable.defoldimg)
+                    painterResource(id = R.drawable.photoadd)
                 },
                 contentDescription = "Ad Image",
                 modifier = Modifier
                     .size(200.dp)
                     .clip(RoundedCornerShape(15.dp))
+                    .clickable(
+                        onClick = {
+                            imageLauncher.launch("image/*")
+                        }
+                    )
             )
             Text(
                 text = "Add your ad",
@@ -106,8 +116,13 @@ fun AddAdScreen(
             )
 
             Spacer(modifier = Modifier.height(10.dp))
-            RoundedCornerDropDownMеnu { selectedItem ->
-                selectedPlatform.value = selectedItem
+            Row(
+            ) {
+                RoundedCornerDropDownMеnu { selectedItem ->
+                    selectedPlatform.value = selectedItem
+                }
+                Categorydropmenu { selectedItem ->
+                    selectedCategory.value = selectedItem }
             }
             Spacer(modifier = Modifier.height(10.dp))
 
@@ -151,14 +166,15 @@ fun AddAdScreen(
                     errorMessage.value = "" // Сбрасываем ошибку при вводе
                 }
             )
+
             Spacer(modifier = Modifier.height(10.dp))
 
-            LoginButton(
-                text = "Select Image",
-                onClick = {
-                    imageLauncher.launch("image/*")
-                }
-            )
+            PriceDropMenu { selectedItem ->
+                selectedCurrency.value = selectedItem }
+
+
+
+            Spacer(modifier = Modifier.height(10.dp))
             Spacer(modifier = Modifier.height(10.dp))
 
             // Отображение сообщения об ошибке
@@ -198,6 +214,8 @@ fun AddAdScreen(
                                     price = price.value,
                                     urLink = urLink.value,
                                     platform = selectedPlatform.value,
+                                    category = selectedCategory.value,
+                                    currency = selectedCurrency.value,
                                     creatorUid = currentUserUid
                                 ),
                                 onSaved = {

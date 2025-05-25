@@ -10,7 +10,7 @@ data class Ad(
     val imageUrl: String = "",
     val isFavorite: Boolean = false,
     val creatorUid: String = "",
-    val category: String = "",
+    val category: String = "Fashion",
     val currency: String = "$",
     val averageRating: Float = 0f // Новое поле для среднего рейтинга
 )

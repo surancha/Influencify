@@ -88,7 +88,7 @@ fun AdListItemUi(
                 Spacer(modifier = Modifier.height(5.dp))
 
                 Text(
-                    text = ad.description,
+                    text = ad.category,
                     color = Color.DarkGray,
                     fontSize = 16.sp,
                     maxLines = 3,

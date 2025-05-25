@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.influencify.ui.screens.login.data.MainScreenDataObject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,14 +36,18 @@ fun CategoriesScreen(
     navController: NavController,
     onCategorieSelected: (String) -> Unit
 ) {
-    val MyGrayL = Color(0xFFCCCCCC) // Уточни, если нужен другой цвет
+    val MyGrayL = Color(0xFFCCCCCC)
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Categories") },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(
+                        onClick = {
+                            navController.popBackStack()
+                        })
+                    {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Back",
@@ -63,20 +68,6 @@ fun CategoriesScreen(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-//                Spacer(modifier = Modifier.height(16.dp))
-//                Text(
-//                    text = "Categories",
-//                    fontSize = 25.sp,
-//                    color = Color.Black,
-//                    fontWeight = FontWeight.Bold
-//                )
-//                Spacer(modifier = Modifier.height(16.dp))
-//                Box(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .height(1.dp)
-//                        .background(MyGrayL)
-//                )
                 LazyColumn(Modifier.fillMaxSize()) {
                     items(CategoriesList) { item ->
                         Column(
