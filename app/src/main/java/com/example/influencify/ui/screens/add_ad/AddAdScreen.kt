@@ -39,6 +39,7 @@ import com.example.influencify.ui.screens.login.LoginButton
 import com.example.influencify.ui.screens.login.RoundedCornerTextField
 import com.example.influencify.ui.screens.login.data.MainScreenDataObject
 import com.example.influencify.ui.screens.main.bottom_menu.BottomMenu
+import com.example.influencify.ui.screens.profile.data.ProfileScreenObject
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -49,7 +50,8 @@ import com.google.firebase.storage.ktx.storage
 @Composable
 fun AddAdScreen(
     navController: NavController,
-    navData: MainScreenDataObject
+    navData: MainScreenDataObject,
+    onSaved: () -> Unit = {}
 ) {
     val selectedPlatform = remember { mutableStateOf("") }
     val selectedCategory = remember { mutableStateOf("") }
@@ -219,12 +221,14 @@ fun AddAdScreen(
                                     creatorUid = currentUserUid
                                 ),
                                 onSaved = {
-                                    navController.navigate(navData) {
+                                    navController.navigate(ProfileScreenObject(navData.uid)) {
                                         popUpTo(navController.graph.startDestinationId) {
-                                            inclusive = false
+                                            saveState = true
                                         }
                                         launchSingleTop = true
+                                        restoreState = true
                                     }
+
                                 },
                                 onError = {
                                     errorMessage.value = "Failed to save ad"
