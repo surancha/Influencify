@@ -115,7 +115,7 @@ fun SignUpScreen(
                     emailState.value,
                     passwordState.value,
                     onSignUpSuccess = { navData ->
-                        onNavigateToMainScreen(navData) // Navigate to MainScreen on success
+                        onNavigateToMainScreen(navData)
                     },
                     onSignUpFailure = { error ->
                         errorState.value = error

@@ -25,7 +25,7 @@ fun PriceDropMenu(
     onOptionSelected: (String) -> Unit
 ) {
     val expanded = remember { mutableStateOf( false) }
-    val selectedOption = remember { mutableStateOf("$") }
+    val selectedOption = remember { mutableStateOf("Select currency") }
     val currencyList = listOf(
         "$","₽","֏"
     )
