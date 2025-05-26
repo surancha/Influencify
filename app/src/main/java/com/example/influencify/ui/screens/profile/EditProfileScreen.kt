@@ -1,8 +1,6 @@
 package com.example.influencify.ui.screens.profile
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,8 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -31,14 +27,12 @@ import com.example.influencify.data.Ad
 import com.example.influencify.ui.screens.login.data.MainScreenDataObject
 import com.example.influencify.ui.screens.main.AdListItemUi
 import com.example.influencify.ui.screens.main.bottom_menu.BottomMenu
-import com.example.influencify.ui.screens.profile.data.EditProfileScreenObject
 import com.example.influencify.ui.screens.profile.data.ProfileScreenObject
-import com.example.influencify.ui.theme.MyGrayL
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 @Composable
-fun ProfileScreen(
+fun EditProfileScreen(
     navData: ProfileScreenObject,
     navController: NavController
 ) {
@@ -121,43 +115,20 @@ fun ProfileScreen(
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.align(Alignment.Start)
                     )
-                    Spacer(modifier = Modifier.height(15.dp))
-                    Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(MyGrayL))
-                    Spacer(modifier = Modifier.height(14.dp))
-
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "Email: ${profileData.value?.get("email") ?: "N/A"}",
                         fontSize = 16.sp,
                         color = Color.Gray,
                         modifier = Modifier.align(Alignment.Start)
                     )
-                    Spacer(modifier = Modifier.height(15.dp))
-                    Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(MyGrayL))
-                    Spacer(modifier = Modifier.height(14.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "Bio: ${profileData.value?.get("bio") ?: "N/A"}",
                         fontSize = 16.sp,
                         color = Color.Gray,
                         modifier = Modifier.align(Alignment.Start)
                     )
-                    Spacer(modifier = Modifier.height(15.dp))
-                    Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(MyGrayL))
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Button(
-                        onClick = {
-                            navController.navigate(EditProfileScreenObject(navData.uid))
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
-                    ) {
-                        Text(
-                            text = "Change",
-                            color = Color.White,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
                     Spacer(modifier = Modifier.height(16.dp))
                 }
                 else -> {

@@ -1,5 +1,7 @@
 package com.example.influencify.ui.screens.details
 
+import android.content.Intent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -31,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import android.net.Uri
 import coil3.compose.AsyncImage
 import com.example.influencify.data.Ad
 import com.example.influencify.ui.screens.login.data.MainScreenDataObject
@@ -165,7 +168,11 @@ fun AdDetailScreen(
                 Text(
                     text = ad!!.urLink,
                     color = Color.Blue,
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
+                    modifier = Modifier.clickable {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(ad!!.urLink))
+                        navController.context.startActivity(intent)
+                    }
                 )
 
 

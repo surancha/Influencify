@@ -136,14 +136,6 @@ fun MainScreen(
                                     )
                                 }
                             ) {}
-                            Icon(
-                                imageVector = Icons.Default.Settings,
-                                contentDescription = "Settings",
-                                modifier = Modifier
-                                    .size(24.dp)
-                                    .clickable { },
-                                tint = Color.Black
-                            )
                         }
                     }
                 )

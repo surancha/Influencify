@@ -20,7 +20,9 @@ import com.example.influencify.ui.screens.login.data.LoginScreenObject
 import com.example.influencify.ui.screens.login.data.MainScreenDataObject
 import com.example.influencify.ui.screens.login.data.SignUpScreenObject
 import com.example.influencify.ui.screens.main.MainScreen
+import com.example.influencify.ui.screens.profile.EditProfileScreen
 import com.example.influencify.ui.screens.profile.ProfileScreen
+import com.example.influencify.ui.screens.profile.data.EditProfileScreenObject
 import com.example.influencify.ui.screens.profile.data.ProfileScreenObject
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -79,6 +81,13 @@ class MainActivity : ComponentActivity() {
                         navController = navController
                     )
                 }
+                composable<EditProfileScreenObject> { navEntry ->
+                    val navData = navEntry.toRoute<ProfileScreenObject>()
+                    EditProfileScreen(
+                        navData = navData,
+                        navController = navController
+                    )
+                }
                 composable("adDetail/{adKey}") { backStackEntry ->
                     val adKey = backStackEntry.arguments?.getString("adKey") ?: ""
                     AdDetailScreen(
@@ -90,13 +99,10 @@ class MainActivity : ComponentActivity() {
                     val navData = navController.previousBackStackEntry
                         ?.toRoute<MainScreenDataObject>()
                         ?: MainScreenDataObject("", "")
-
                     CategoriesScreen(
                         navController = navController,
                         onCategorieSelected = { category ->
-                            // Update the previous screen's navData with the selected category
                             val updatedNavData = navData.copy(selectedCategory = category)
-                            // Just pop back to the previous screen (MainScreen) with the updated category
                             navController.previousBackStackEntry?.savedStateHandle?.set(
                                 "selectedCategory",
                                 category

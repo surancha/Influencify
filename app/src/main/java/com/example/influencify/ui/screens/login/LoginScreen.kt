@@ -52,8 +52,8 @@ fun LoginScreen(
     val auth = Firebase.auth
     val fs = Firebase.firestore
     val errorState = remember { mutableStateOf("") }
-    val emailState = remember { mutableStateOf("stepanyanruben31@gmail.com") }
-    val passwordState = remember { mutableStateOf("1234567890") }
+    val emailState = remember { mutableStateOf("individualproject2025@gmail.com") }
+    val passwordState = remember { mutableStateOf("Samsung2025") }
 
     Image(
         painter = painterResource(id = R.drawable.backgraund1),
