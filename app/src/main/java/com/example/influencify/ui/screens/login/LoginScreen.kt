@@ -56,7 +56,7 @@ fun LoginScreen(
     val passwordState = remember { mutableStateOf("Samsung2025") }
 
     Image(
-        painter = painterResource(id = R.drawable.backgraund1),
+        painter = painterResource(id = R.drawable.backgraund),
         contentDescription = "BG",
         modifier = Modifier.fillMaxSize(),
         contentScale = ContentScale.Crop,

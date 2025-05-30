@@ -226,9 +226,21 @@ fun ProfileScreen(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         items(userAds.value) { ad ->
-                            AdListItemUi(
+                            ProfileAdListItemUi(
                                 ad = ad,
-                                navController = navController
+                                navController = navController,
+                                onDeleteclick = {
+                                    db.collection("ads").document(ad.key)
+                                        .delete()
+                                        .addOnSuccessListener {
+                                            userAds.value =
+                                                userAds.value.filter { it.key != ad.key }
+                                        }
+                                        .addOnFailureListener { exception ->
+                                            errorMessage.value =
+                                                "Failed to delete ad: ${exception.message}"
+                                        }
+                                }
                             )
                         }
                     }
