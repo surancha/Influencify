@@ -12,7 +12,8 @@ data class Ad(
     val creatorUid: String = "",
     val category: String = "Fashion",
     val currency: String = "$",
-    val averageRating: Float = 0f // Новое поле для среднего рейтинга
+    val averageRating: Float = 0f,
+    val isApproved: Boolean = false
 )
 //package com.example.influencify.data
 //

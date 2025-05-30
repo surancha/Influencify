@@ -74,7 +74,7 @@ fun AdDetailScreen(
                                 .fillMaxSize()
                                 .padding(16.dp),
                             verticalArrangement = Arrangement.Top,
-                            horizontalAlignment = Alignment.End
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
                                 text = ad!!.title,
@@ -108,7 +108,7 @@ fun AdDetailScreen(
                 .padding(paddingValues)
                 .padding(16.dp),
             verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.Start
         ) {
             if (ad != null) {
                 // Display the ad photo
@@ -124,19 +124,26 @@ fun AdDetailScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Display the title
                 Text(
-                    text = ad!!.title,
+                    text = "Platform",
                     color = Color.Black,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 24.sp
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Display the platform
                 Text(
                     text = ad!!.platform,
+                    color = Color.Black,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 20.sp
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "Description",
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
@@ -156,7 +163,7 @@ fun AdDetailScreen(
 
                 // Display the price
                 Text(
-                    text = "${ad!!.price}$",
+                    text = "${ad!!.price} ${ad!!.currency}",
                     color = Color.Black,
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 20.sp

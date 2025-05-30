@@ -1,5 +1,6 @@
 package com.example.influencify.ui.screens.profile
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,8 +10,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -22,11 +25,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil3.compose.rememberAsyncImagePainter
+import com.example.influencify.R
 import com.example.influencify.data.Ad
 import com.example.influencify.ui.screens.login.data.MainScreenDataObject
 import com.example.influencify.ui.screens.main.AdListItemUi
@@ -80,10 +88,12 @@ fun ProfileScreen(
 
     Scaffold(
         bottomBar = {
-            BottomMenu(
-                navController = navController,
-                navData = MainScreenDataObject(navData.uid, "")
-            )
+            MainScreenDataObject(uid = navData.uid, email = profileData.value?.get("email")?.toString() ?: "").let { mainScreenData ->
+                BottomMenu(
+                    navController = navController,
+                    navData = mainScreenData
+                )
+            }
         }
     ) { paddingValues ->
         Column(
@@ -95,7 +105,7 @@ fun ProfileScreen(
             verticalArrangement = Arrangement.Top
         ) {
             Text(
-                text = "Your Profile",
+                text = "${profileData.value?.get("name") ?: "N/A"}",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -115,13 +125,38 @@ fun ProfileScreen(
                     )
                 }
                 profileData.value != null -> {
+                    // Profile image
+                    Image(
+                        painter = if (profileData.value?.get("imageUrl")?.toString()?.isNotEmpty() == true) {
+                            rememberAsyncImagePainter(model = profileData.value?.get("imageUrl"))
+                        } else {
+                            painterResource(id = R.drawable.photoadd) // Placeholder image
+                        },
+                        contentDescription = "Profile Image",
+                        modifier = Modifier
+                            .size(120.dp)
+                            .clip(RoundedCornerShape(60.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+
                     Text(
-                        text = "Name: ${profileData.value?.get("name") ?: "N/A"}",
+                        text = "Name",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.align(Alignment.Start)
+                    )
+
+                    Spacer(modifier = Modifier.height(15.dp))
+
+                    Text(
+                        text = "${profileData.value?.get("name") ?: "N/A"}",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.align(Alignment.Start)
                     )
                     Spacer(modifier = Modifier.height(15.dp))
+
                     Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(MyGrayL))
                     Spacer(modifier = Modifier.height(14.dp))
 
@@ -134,6 +169,7 @@ fun ProfileScreen(
                     Spacer(modifier = Modifier.height(15.dp))
                     Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(MyGrayL))
                     Spacer(modifier = Modifier.height(14.dp))
+
                     Text(
                         text = "Bio: ${profileData.value?.get("bio") ?: "N/A"}",
                         fontSize = 16.sp,

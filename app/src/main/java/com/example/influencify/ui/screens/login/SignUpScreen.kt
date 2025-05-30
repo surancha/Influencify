@@ -1,5 +1,8 @@
 package com.example.influencify.ui.screens.login
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,15 +32,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.rememberAsyncImagePainter
 import com.example.influencify.R
-import com.example.influencify.ui.screens.login.data.MainScreenDataObject
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import com.example.influencify.ui.screens.login.data.MainScreenDataObject
 
 @Composable
 fun SignUpScreen(
     onBackToLogin: () -> Unit,
-    onNavigateToMainScreen: (MainScreenDataObject) -> Unit = {}
+    onNavigateToMainScreen: (MainScreenDataObject) -> Unit
 ) {
     val textTypography1 = Typography(
         bodyLarge = TextStyle(
@@ -49,12 +53,21 @@ fun SignUpScreen(
 
     val auth = Firebase.auth
     val db = Firebase.firestore
+    val storage = Firebase.storage
     val errorState = remember { mutableStateOf("") }
     val emailState = remember { mutableStateOf("") }
     val nameState = remember { mutableStateOf("") }
     val bioState = remember { mutableStateOf("") }
     val passwordState = remember { mutableStateOf("") }
     val confirmPasswordState = remember { mutableStateOf("") }
+    val imageUri = remember { mutableStateOf<Uri?>(null) }
+
+    // Image picker launcher
+    val imageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        imageUri.value = uri
+    }
 
     Image(
         painter = painterResource(id = R.drawable.backgraund1),
@@ -70,6 +83,20 @@ fun SignUpScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        // Profile image
+        Image(
+            painter = if (imageUri.value != null) {
+                rememberAsyncImagePainter(model = imageUri.value)
+            } else {
+                painterResource(id = R.drawable.photoadd) // Placeholder image
+            },
+            contentDescription = "Profile Image",
+            modifier = Modifier
+                .size(120.dp)
+                .clip(RoundedCornerShape(60.dp))
+                .clickable { imageLauncher.launch("image/*") },
+            contentScale = ContentScale.Crop
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
         RoundedCornerTextField(
@@ -140,24 +167,29 @@ fun SignUpScreen(
                     emailState.value,
                     passwordState.value,
                     onSignUpSuccess = { navData ->
-                        // Save profile data to Firestore
                         val profileData = hashMapOf(
                             "email" to emailState.value,
                             "name" to nameState.value,
                             "bio" to bioState.value,
                             "uid" to navData.uid
                         )
-                        db.collection("users")
-                            .document(navData.uid)
-                            .collection("data")
-                            .document("profile")
-                            .set(profileData)
-                            .addOnSuccessListener {
-                                onNavigateToMainScreen(navData)
-                            }
-                            .addOnFailureListener { error ->
-                                errorState.value = "Failed to save profile: ${error.message}"
-                            }
+
+                        // Upload image to Firebase Storage if selected
+                        if (imageUri.value != null) {
+                            val storageRef = storage.reference.child("profile_images/${navData.uid}.jpg")
+                            storageRef.putFile(imageUri.value!!)
+                                .addOnSuccessListener {
+                                    storageRef.downloadUrl.addOnSuccessListener { uri ->
+                                        profileData["imageUrl"] = uri.toString()
+                                        saveProfileData(db, navData.uid, profileData, errorState, onNavigateToMainScreen, navData)
+                                    }
+                                }
+                                .addOnFailureListener { error ->
+                                    errorState.value = "Failed to upload image: ${error.message}"
+                                }
+                        } else {
+                            saveProfileData(db, navData.uid, profileData, errorState, onNavigateToMainScreen, navData)
+                        }
                     },
                     onSignUpFailure = { error ->
                         errorState.value = error
@@ -185,4 +217,25 @@ fun SignUpScreen(
             }
         )
     }
+}
+
+private fun saveProfileData(
+    db: com.google.firebase.firestore.FirebaseFirestore,
+    uid: String,
+    profileData: HashMap<String, String>,
+    errorState: androidx.compose.runtime.MutableState<String>,
+    onNavigateToMainScreen: (MainScreenDataObject) -> Unit,
+    navData: MainScreenDataObject
+) {
+    db.collection("users")
+        .document(uid)
+        .collection("data")
+        .document("profile")
+        .set(profileData)
+        .addOnSuccessListener {
+            onNavigateToMainScreen(navData)
+        }
+        .addOnFailureListener { error ->
+            errorState.value = "Failed to save profile: ${error.message}"
+        }
 }
