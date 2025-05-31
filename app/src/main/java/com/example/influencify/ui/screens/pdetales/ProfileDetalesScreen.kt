@@ -40,7 +40,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.ui.res.painterResource
 import coil3.compose.AsyncImage
+import com.example.influencify.R
 import com.example.influencify.data.Ad
 import com.example.influencify.data.Favorite
 import com.example.influencify.data.Profile
@@ -112,6 +114,19 @@ fun ProfileDetalesScreen(
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Назад"
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(
+                        onClick = {
+                            // Здесь можно добавить навигацию к экрану сообщений
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_messenge),
+                            contentDescription = "Сообщения",
+                            tint = Color.Black
                         )
                     }
                 }
