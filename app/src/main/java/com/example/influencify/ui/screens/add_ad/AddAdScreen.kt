@@ -202,6 +202,7 @@ fun AddAdScreen(
                         price.value.toLongOrNull() == null -> errorMessage.value = "Price must be a valid number"
                         price.value.toLong() < 1 || price.value.toLong() > 10_000_000 -> errorMessage.value = "Price must be between 1 and 10,000,000"
                         selectedPlatform.value.isEmpty() -> errorMessage.value = "Please select a platform"
+                        selectedCategory.value.isEmpty() -> errorMessage.value = "Please select a Category"
                         selectedImageUri.value == null -> errorMessage.value = "Please upload an image"
                         currentUserUid.isBlank() -> errorMessage.value = "User not authenticated"
                         else -> {
@@ -221,13 +222,7 @@ fun AddAdScreen(
                                     creatorUid = currentUserUid
                                 ),
                                 onSaved = {
-                                    navController.navigate(ProfileScreenObject(navData.uid)) {
-                                        popUpTo(navController.graph.startDestinationId) {
-                                            saveState = true
-                                        }
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    }
+                                    navController.navigate("profileDetails/${currentUserUid}")
 
                                 },
                                 onError = {

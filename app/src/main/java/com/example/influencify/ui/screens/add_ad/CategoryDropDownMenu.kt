@@ -24,7 +24,7 @@ fun Categorydropmenu(
     onOptionSelected: (String) -> Unit
 ) {
     val expanded = remember { mutableStateOf( false) }
-    val selectedOption = remember { mutableStateOf("Fashion") }
+    val selectedOption = remember { mutableStateOf("Select Category") }
     val categoryList = listOf(
         "Fashion",
         "Tech",
