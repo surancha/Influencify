@@ -15,7 +15,7 @@ sealed class BottomMenuItem(
     )
 
     object Messages : BottomMenuItem(
-        route = "messages",
+        route = AddScreenObject,
         title = "Messages",
         iconId = R.drawable.ic_messenge
     )
