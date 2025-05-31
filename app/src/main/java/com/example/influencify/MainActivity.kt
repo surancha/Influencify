@@ -3,9 +3,11 @@ package com.example.influencify
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import androidx.navigation.toRoute
 import com.example.influencify.ui.screens.add_ad.AddAdScreen
 import com.example.influencify.ui.screens.add_ad.data.AddScreenObject
@@ -20,6 +22,7 @@ import com.example.influencify.ui.screens.login.data.LoginScreenObject
 import com.example.influencify.ui.screens.login.data.MainScreenDataObject
 import com.example.influencify.ui.screens.login.data.SignUpScreenObject
 import com.example.influencify.ui.screens.main.MainScreen
+import com.example.influencify.ui.screens.pdetales.ProfileDetalesScreen
 import com.example.influencify.ui.screens.profile.EditProfileScreen
 import com.example.influencify.ui.screens.profile.ProfileScreen
 import com.example.influencify.ui.screens.profile.data.EditProfileScreenObject
@@ -92,6 +95,18 @@ class MainActivity : ComponentActivity() {
                     val adKey = backStackEntry.arguments?.getString("adKey") ?: ""
                     AdDetailScreen(
                         adKey = adKey,
+                        navController = navController
+                    )
+                }
+                composable(
+                    route = "profileDetails/{profileuid}",
+                    arguments = listOf(
+                        navArgument("profileuid") { type = NavType.StringType }
+                    )
+                ) { backStackEntry ->
+                    val profileuid = backStackEntry.arguments?.getString("profileuid") ?: ""
+                    ProfileDetalesScreen(
+                        profileuid = profileuid,
                         navController = navController
                     )
                 }
